@@ -2,6 +2,7 @@
 
 void default_constants();
 
+void blue_l();
 void drive_example();
 void turn_example();
 void drive_and_turn();

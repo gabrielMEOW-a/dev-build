@@ -8,19 +8,19 @@
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {1, 2, 3},     // Left Chassis Ports (negative port will reverse it!)
-    {-4, -5, -6},  // Right Chassis Ports (negative port will reverse it!)
+    {-1, -2, -3},  // Left Chassis Ports (negative port will reverse it!)
+    {11, 12, 13},  // Right Chassis Ports (negative port will reverse it!)
 
-    7,      // IMU Port
-    4.125,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
-    343);   // Wheel RPM = cartridge * (motor gear / wheel gear)
+    19,      // IMU Port
+    3.15,   // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
+    450);  // Wheel RPM = cartridge * (motor gear / wheel gear)
 
 // Uncomment the trackers you're using here!
 // - `8` and `9` are smart ports (making these negative will reverse the sensor)
 //  - you should get positive values on the encoders going FORWARD and RIGHT
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
-// ez::tracking_wheel horiz_tracker(8, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels
+ez::tracking_wheel horiz_tracker(-8, 2.0671, -4.9);  // This tracking wheel is perpendicular to the drive wheels
 // ez::tracking_wheel vert_tracker(9, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels
 
 /**
@@ -38,7 +38,7 @@ void initialize() {
   // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
   //  - change `back` to `front` if the tracking wheel is in front of the midline
   //  - ignore this if you aren't using a horizontal tracker
-  // chassis.odom_tracker_back_set(&horiz_tracker);
+  chassis.odom_tracker_back_set(&horiz_tracker);
   // Look at your vertical tracking wheel and decide if it's to the left or right of the center of the robot
   //  - change `left` to `right` if the tracking wheel is to the right of the centerline
   //  - ignore this if you aren't using a vertical tracker
@@ -47,7 +47,7 @@ void initialize() {
   // Configure your chassis controls
   chassis.opcontrol_curve_buttons_toggle(true);   // Enables modifying the controller curve with buttons on the joysticks
   chassis.opcontrol_drive_activebrake_set(0.0);   // Sets the active brake kP. We recommend ~2.  0 will disable.
-  chassis.opcontrol_curve_default_set(0.0, 0.0);  // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)
+  chassis.opcontrol_curve_default_set(0.0, 6.7);  // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)
 
   // Set the drive to your own constants from autons.cpp!
   default_constants();
@@ -58,6 +58,7 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
+      {"Left Side Blue", blue_l},
       {"Drive\n\nDrive forward and come back", drive_example},
       {"Turn\n\nTurn 3 times.", turn_example},
       {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
@@ -77,6 +78,7 @@ void initialize() {
   // Initialize chassis and auton selector
   chassis.initialize();
   ez::as::initialize();
+
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
 }
 
@@ -226,6 +228,40 @@ void ez_template_extras() {
   }
 }
 
+void setIntakeF(int input) {
+    intakeF.move(input);
+}
+
+void setIntakeB(int input) {
+    intakeB.move(input);
+}
+
+void setIntakeU(int input) {
+    intakeU.move(input);
+}
+
+void intakeOpcontrol() {
+    if (master.get_digital(DIGITAL_L1)) {
+        setIntakeF(127);
+        setIntakeB(127);
+    } else if (master.get_digital(DIGITAL_L2)) {
+        setIntakeF(-127);
+        setIntakeB(-127);
+    } else if (master.get_digital(DIGITAL_R1)) {
+        setIntakeF(127);
+        setIntakeB(-127);
+        setIntakeU(127);
+    } else if (master.get_digital(DIGITAL_R2)) {
+        setIntakeF(127);
+        setIntakeB(-127);
+        setIntakeU(-127);
+    } else {
+        setIntakeF(0);
+        setIntakeB(0);
+        setIntakeU(0);
+    }
+}
+
 /**
  * Runs the operator control code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -243,20 +279,29 @@ void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
 
+  int timer = 0;
+
+  // chassis.opcontrol_joystick_practicemode_toggle(true);
+
   while (true) {
     // Gives you some extras to make EZ-Template ezier
     ez_template_extras();
 
-    chassis.opcontrol_tank();  // Tank control
-    // chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
-    // chassis.opcontrol_arcade_standard(ez::SINGLE);  // Standard single arcade
-    // chassis.opcontrol_arcade_flipped(ez::SPLIT);    // Flipped split arcade
-    // chassis.opcontrol_arcade_flipped(ez::SINGLE);   // Flipped single arcade
+    chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
 
     // . . .
     // Put more user control code here!
     // . . .
+    // intakeOpcontrol();
+    // if (master.get_digital_new_press(DIGITAL_UP)) {
+    //   unloader.set(!unloader.get());
+    // }
+
+    // if (!(timer % 10) && master.get_digital(DIGITAL_RIGHT)) {
+    //   descore.set(!descore.get());
+    // }
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
+    timer ++;
   }
 }
