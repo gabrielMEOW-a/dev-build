@@ -11,7 +11,7 @@ ez::Drive chassis(
     {-1, -2, -3},  // Left Chassis Ports (negative port will reverse it!)
     {11, 12, 13},  // Right Chassis Ports (negative port will reverse it!)
 
-    19,      // IMU Port
+    15,      // IMU Port
     3.15,   // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
     450);  // Wheel RPM = cartridge * (motor gear / wheel gear)
 
@@ -20,7 +20,7 @@ ez::Drive chassis(
 //  - you should get positive values on the encoders going FORWARD and RIGHT
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
-ez::tracking_wheel horiz_tracker(-8, 2.0671, -4.9);  // This tracking wheel is perpendicular to the drive wheels
+ez::tracking_wheel horiz_tracker(8, 2.0671, -4.9);  // This tracking wheel is perpendicular to the drive wheels
 // ez::tracking_wheel vert_tracker(9, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels
 
 /**
@@ -58,6 +58,8 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
+      {"Carry", carry},
+      {"Right Side Blue", blue_r},
       {"Left Side Blue", blue_l},
       {"Drive\n\nDrive forward and come back", drive_example},
       {"Turn\n\nTurn 3 times.", turn_example},
@@ -78,6 +80,7 @@ void initialize() {
   // Initialize chassis and auton selector
   chassis.initialize();
   ez::as::initialize();
+  unloader.set(true);
 
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
 }
@@ -285,21 +288,23 @@ void opcontrol() {
 
   while (true) {
     // Gives you some extras to make EZ-Template ezier
-    ez_template_extras();
+    // ez_template_extras();
 
+
+    // chassis.opcontrol_tank();
     chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
 
     // . . .
     // Put more user control code here!
     // . . .
-    // intakeOpcontrol();
-    // if (master.get_digital_new_press(DIGITAL_UP)) {
-    //   unloader.set(!unloader.get());
-    // }
+    intakeOpcontrol();
+    if (master.get_digital_new_press(DIGITAL_UP)) {
+      unloader.set(!unloader.get());
+    }
 
-    // if (!(timer % 10) && master.get_digital(DIGITAL_RIGHT)) {
-    //   descore.set(!descore.get());
-    // }
+    if (master.get_digital_new_press(DIGITAL_RIGHT)) {
+      descore.set(!descore.get());
+    }
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
     timer ++;
