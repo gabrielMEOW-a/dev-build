@@ -231,40 +231,6 @@ void ez_template_extras() {
   }
 }
 
-void setIntakeF(int input) {
-    intakeF.move(input);
-}
-
-void setIntakeB(int input) {
-    intakeB.move(input);
-}
-
-void setIntakeU(int input) {
-    intakeU.move(input);
-}
-
-void intakeOpcontrol() {
-    if (master.get_digital(DIGITAL_L1)) {
-        setIntakeF(127);
-        setIntakeB(127);
-    } else if (master.get_digital(DIGITAL_L2)) {
-        setIntakeF(-127);
-        setIntakeB(-127);
-    } else if (master.get_digital(DIGITAL_R1)) {
-        setIntakeF(127);
-        setIntakeB(-127);
-        setIntakeU(127);
-    } else if (master.get_digital(DIGITAL_R2)) {
-        setIntakeF(127);
-        setIntakeB(-127);
-        setIntakeU(-127);
-    } else {
-        setIntakeF(0);
-        setIntakeB(0);
-        setIntakeU(0);
-    }
-}
-
 /**
  * Runs the operator control code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -297,7 +263,7 @@ void opcontrol() {
     // . . .
     // Put more user control code here!
     // . . .
-    intakeOpcontrol();
+    intakeOpControl();
     if (master.get_digital_new_press(DIGITAL_UP)) {
       unloader.set(!unloader.get());
     }
