@@ -3,11 +3,9 @@
 #include "EZ-Template/api.hpp"
 #include "api.h"
 
-inline pros::Motor intakeF(-20, pros::v5::MotorGear::blue);
-inline pros::Motor intakeM(-10);
-inline pros::Motor intakeU(9);
+inline pros::Motor intakeF(17, pros::v5::MotorGear::blue);
+inline pros::Motor intakeU(-16, pros::v5::MotorGear::blue);
 
-void set_intakeF(int input);
-void set_intakeM(int input);
-void set_intakeU(int input);
+void setintakeF(int input);
+void setintakeU(int input);
 void intakeOpControl();

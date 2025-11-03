@@ -393,62 +393,13 @@ void measure_offsets() {
 // . . .
 
 void blue_l() {
-  intakeF.move(127);
-  intakeB.move(127);
-  chassis.pid_odom_set({{{0_in, 18_in}, fwd, DRIVE_SPEED},
-                        {{24_in, 12_in, 135_deg}, fwd, DRIVE_SPEED},
-                        {{38_in, 5_in, 100_deg}, fwd, 30}},
-                        true);
-  chassis.pid_wait();
-  pros::delay(100);
-  chassis.pid_odom_set({{{45.4_in, -4.5_in, 135_deg}, fwd, 80}},
-                        true);
-  chassis.pid_wait();
-  intakeB.move(-127);
-  intakeU.move(-127);
-  chassis.pid_wait();
-  pros::delay(2500);
-  intakeB.move(0);
-  intakeU.move(0);
-  intakeF.move(0);
-  chassis.pid_wait();
-}
-
-void blue_r() {
-  intakeF.move(127);
-  intakeB.move(127);
-  unloader.set(true);
-  chassis.pid_odom_set({{{0_in, 18_in}, fwd, DRIVE_SPEED},
-                        {{-24_in, 12_in, -135_deg}, fwd, DRIVE_SPEED},
-                        {{-38_in, 5_in, -100_deg}, fwd, 30}},
-                        true);
-  chassis.pid_wait();
-  pros::delay(250);
-  chassis.pid_wait();
-  chassis.pid_odom_set({{{-47.4_in, -4.5_in, -120_deg}, fwd, 80}},
-                        true);
-  chassis.pid_wait();
-  intakeB.move(-127);
-  intakeF.move(-127);
-  chassis.pid_wait();
-  pros::delay(3500);
-  intakeB.move(0);
-  intakeF.move(0);
-  chassis.pid_wait();
-  intakeF.move(127);
-  intakeB.move(127);
-  chassis.pid_turn_relative_set(-180_deg, TURN_SPEED);
-  chassis.pid_wait();
-  unloader.set(false);
-  chassis.pid_wait();
-  chassis.pid_odom_set({{{-10_in,32_in,45_deg}, fwd, 70},
-                        {{-6_in,32_in,90_deg}, fwd, 40}},
-                        true);
-  chassis.pid_wait();
   
 }
 
+void blue_r() {
+    
+}
+
 void carry() {
-  chassis.pid_odom_set(6_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
+  
 }
