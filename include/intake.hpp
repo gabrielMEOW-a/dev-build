@@ -4,7 +4,8 @@
 #include "api.h"
 
 inline pros::Motor intakeF(17, pros::v5::MotorGear::blue);
-inline pros::Motor intakeU(-16, pros::v5::MotorGear::blue);
+inline pros::Motor intakeU(-16);
+inline pros::Motor intakeB(-15);
 
 void setintakeF(int input);
 void setintakeU(int input);
