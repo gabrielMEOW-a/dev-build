@@ -7,8 +7,8 @@ extern Drive chassis;
 
 // Your motors, sensors, etc. should go here.  Below are examples
 
-inline ez::Piston unloader('A');
-inline ez::Piston descore('B');
+inline ez::Piston upper('A');
+inline ez::Piston unloader('B');
 
 // inline pros::Motor intake(1);
 // inline pros::adi::DigitalIn limit_switch('A');
