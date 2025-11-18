@@ -15,9 +15,11 @@ const int SWING_SPEED = 110;
 ///
 void default_constants() {
   // P, I, D, and Start I
-  chassis.pid_drive_constants_set(10.3, 0.15, 41.25, 2.0);         // Fwd/rev constants, used for odom and non odom motions
+  // done
+  chassis.pid_drive_constants_set(8.60, 0.041, 47.75, 2.0);         // Fwd/rev constants, used for odom and non odom motions
   chassis.pid_heading_constants_set(11.0, 0.0, 20.0);        // Holds the robot straight while going forward without odom
-  chassis.pid_turn_constants_set(3.0, 0.00, 30.0, 15.0);     // Turn in place constants
+  // not done yet
+  chassis.pid_turn_constants_set(3.9, 0.015, 33.75, 15.0);     // Turn in place constants
   chassis.pid_swing_constants_set(6.0, 0.0, 65.0);           // Swing constants
   chassis.pid_odom_angular_constants_set(2.6, 0.0, 58.75, 1.0);    // Angular control for odom motions
   chassis.pid_odom_boomerang_constants_set(5.1, 0.0, 40);  // Angular control for boomerang motions
@@ -57,29 +59,41 @@ void drive_example() {
   // The third parameter is a boolean (true or false) for enabling/disabling a slew at the start of drive motions
   // for slew, only enable it when the drive distance is greater than the slew distance + a few inches
 
-  // chassis.pid_drive_set(48_in, DRIVE_SPEED, true);
-  // chassis.pid_wait();
+  chassis.pid_drive_set(48_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
 
-  // chassis.pid_drive_set(-24_in, DRIVE_SPEED);
+  pros::delay(100);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(-24_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  pros::delay(100);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(-12_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  pros::delay(100);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(-6_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  pros::delay(100);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(-6_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  // chassis.pid_drive_set(24_in, DRIVE_SPEED);
   // chassis.pid_wait();
 
   // chassis.pid_drive_set(-12_in, DRIVE_SPEED);
   // chassis.pid_wait();
 
-  // chassis.pid_drive_set(-6_in, DRIVE_SPEED);
+  // chassis.pid_drive_set(-12_in, DRIVE_SPEED);
   // chassis.pid_wait();
-
-  // chassis.pid_drive_set(-6_in, DRIVE_SPEED);
-  // chassis.pid_wait();
-
-  chassis.pid_drive_set(24_in, DRIVE_SPEED);
-  chassis.pid_wait();
-
-  chassis.pid_drive_set(-12_in, DRIVE_SPEED);
-  chassis.pid_wait();
-
-  chassis.pid_drive_set(-12_in, DRIVE_SPEED);
-  chassis.pid_wait();
 }
 
 ///

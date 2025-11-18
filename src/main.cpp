@@ -12,7 +12,7 @@ ez::Drive chassis(
     {18, 19, 20},  // Right Chassis Ports (negative port will reverse it!)
 
     1,      // IMU Port
-    3.15,   // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
+    3.25,   // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!) || adjusted from moving robot 24-in
     450);  // Wheel RPM = cartridge * (motor gear / wheel gear)
 
 // Uncomment the trackers you're using here!
@@ -21,7 +21,7 @@ ez::Drive chassis(
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
 // ez::tracking_wheel horiz_tracker(8, 2.0671, -4.9);  // This tracking wheel is perpendicular to the drive wheels
-ez::tracking_wheel vert_tracker(9, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels
+ez::tracking_wheel vert_tracker(14, 2.00, 0.35);   // This tracking wheel is parallel to the drive wheels || adjusted from moving robot 24-in
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -42,7 +42,7 @@ void initialize() {
   // Look at your vertical tracking wheel and decide if it's to the left or right of the center of the robot
   //  - change `left` to `right` if the tracking wheel is to the right of the centerline
   //  - ignore this if you aren't using a vertical tracker
-  chassis.odom_tracker_left_set(&vert_tracker);
+  chassis.odom_tracker_right_set(&vert_tracker);
 
   // Configure your chassis controls
   chassis.opcontrol_curve_buttons_toggle(false);   // Enables modifying the controller curve with buttons on the joysticks
@@ -254,23 +254,23 @@ void opcontrol() {
 
   while (true) {
     // Gives you some extras to make EZ-Template ezier
-    // ez_template_extras();
+    ez_template_extras();
 
 
     // chassis.opcontrol_tank();
-    chassis.opcontrol_arcade_standard(ez::SINGLE);   // Standard split arcade
+    chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
 
     // . . .
     // Put more user control code here!
     // . . .
-    intakeOpControl();
-    if (master.get_digital_new_press(DIGITAL_UP)) {
-      unloader.set(!unloader.get());
-    }
+    // intakeOpControl();
+    // if (master.get_digital_new_press(DIGITAL_UP)) {
+    //   unloader.set(!unloader.get());
+    // }
 
-    if (master.get_digital_new_press(DIGITAL_RIGHT)) {
-      upper.set(!upper.get());
-    }
+    // if (master.get_digital_new_press(DIGITAL_RIGHT)) {
+    //   upper.set(!upper.get());
+    // }
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
     timer ++;
