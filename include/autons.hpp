@@ -5,6 +5,8 @@ void default_constants();
 void carry();
 void blue_l();
 void blue_r();
+void red_l();
+void red_r();
 void drive_example();
 void turn_example();
 void drive_and_turn();

@@ -23,17 +23,52 @@ ez::Drive chassis(
 // ez::tracking_wheel horiz_tracker(8, 2.0671, -4.9);  // This tracking wheel is perpendicular to the drive wheels
 ez::tracking_wheel vert_tracker(14, 2.00, 0.35);   // This tracking wheel is parallel to the drive wheels || adjusted from moving robot 24-in
 
+bool racism_override = false;
+bool team;
+bool be_racist;
+void racism(void* paran) {
+  while (true) {
+    if (ColorSensor.get_proximity() > 240 && be_racist) {
+      if ((team && (ColorSensor.get_hue() > 340 || ColorSensor.get_hue() < 20) || (ColorSensor.get_hue() > 180 && ColorSensor.get_hue() < 220))) {
+        racism_override = true;
+        int cur_pos = intake.get_position();
+        intakeU.move(127);
+        while (intake.get_position() > cur_pos - 26000) {
+          pros::delay(10);
+        }
+        intakeU.move(0);
+        eject.set(true);
+        pros::delay(50);
+        eject.set(false);
+        intakeU.move(127);
+        racism_override = false;
+      }
+    }
+    pros::delay(10);
+  }
+}
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
+
+set<int> redautons = {2,3};
+
 void initialize() {
   // Print our branding over your terminal :D
   ez::ez_template_print();
 
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
+
+  if (ez::as::auton_selector.auton_page_current == 2 || ez::as::auton_selector.auton_page_current == 3) {
+    team = false;
+  } else {
+    team = true;
+  }
+  pros::Task be_racist(racism, (void*)"parameter(s) here", "I hate...");
 
   // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
   //  - change `back` to `front` if the tracking wheel is in front of the midline
@@ -58,9 +93,11 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"Carry", carry},
       {"Right Side Blue", blue_r},
       {"Left Side Blue", blue_l},
+      {"Right Side Red", red_r},
+      {"Left Side Red", red_l},
+      {"Carry", carry},
       {"Drive\n\nDrive forward and come back", drive_example},
       {"Turn\n\nTurn 3 times.", turn_example},
       {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
@@ -80,7 +117,9 @@ void initialize() {
   // Initialize chassis and auton selector
   chassis.initialize();
   ez::as::initialize();
-  unloader.set(true);
+  ColorSensor.set_led_pwm(100);
+  intake.reset_position();
+  // unloader.set(true);
 
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
 }
@@ -254,7 +293,7 @@ void opcontrol() {
 
   while (true) {
     // Gives you some extras to make EZ-Template ezier
-    ez_template_extras();
+    // ez_template_extras();
 
 
     // chassis.opcontrol_tank();
@@ -263,14 +302,20 @@ void opcontrol() {
     // . . .
     // Put more user control code here!
     // . . .
-    // intakeOpControl();
-    // if (master.get_digital_new_press(DIGITAL_UP)) {
-    //   unloader.set(!unloader.get());
-    // }
+    if (!racism_override) {
+      intakeOpControl();
+    }
+    if (master.get_digital_new_press(DIGITAL_RIGHT)) {
+      unloader.set(!unloader.get());
+    }
 
-    // if (master.get_digital_new_press(DIGITAL_RIGHT)) {
-    //   upper.set(!upper.get());
-    // }
+    if (master.get_digital_new_press(DIGITAL_UP)) {
+      upper.set(!upper.get());
+    }
+
+    if (master.get_digital_new_press(DIGITAL_DOWN)) {
+      back.set(!back.get());
+    }
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
     timer ++;

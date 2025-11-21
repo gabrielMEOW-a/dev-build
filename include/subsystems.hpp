@@ -9,6 +9,12 @@ extern Drive chassis;
 
 inline ez::Piston upper('A');
 inline ez::Piston unloader('B');
+inline ez::Piston back('C');
+inline ez::Piston eject('D');
+
+inline pros::Rotation intake(10);
+
+inline pros::Optical ColorSensor(15);
 
 // inline pros::Motor intake(1);
 // inline pros::adi::DigitalIn limit_switch('A');

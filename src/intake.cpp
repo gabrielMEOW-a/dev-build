@@ -8,19 +8,13 @@ void setIntakeU(int input) {
     intakeU.move(input);
 }
 
-void setIntakeB(int input) {
-    intakeB.move(input);
-}
-
 void intakeOpControl() {
     if (master.get_digital(DIGITAL_L1)) {
         setIntakeF(127);
         setIntakeU(127);
-        setIntakeB(127);
     } else if (master.get_digital(DIGITAL_L2)) {
         setIntakeF(-127);
         setIntakeU(-127);
-        setIntakeB(-127);
     } else if (master.get_digital(DIGITAL_R1)) {
         setIntakeF(127);
     } else if (master.get_digital(DIGITAL_R2)) {
@@ -29,6 +23,5 @@ void intakeOpControl() {
     } else {
         setIntakeF(0);
         setIntakeU(0);
-        setIntakeB(0);
     }
 }
