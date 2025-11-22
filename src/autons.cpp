@@ -409,52 +409,41 @@ void measure_offsets() {
 void blue_l() {
   chassis.pid_odom_set(
     {{{0_in, 2_in, 0_deg}, fwd, DRIVE_SPEED},
-      {{-30.25_in, 10_in, -110_deg}, fwd, DRIVE_SPEED},
-      {{-37.25_in, 8_in}, fwd, 50},
-      {{-49.5_in, -5_in, -135_deg}, fwd, DRIVE_SPEED}},
+      {{28.25_in, 10_in, 105_deg}, fwd, 80},
+      {{35.25_in, 8_in}, fwd, 80},
+      {{50_in, -6_in, 135_deg}, fwd, DRIVE_SPEED}},
   true);
   chassis.pid_wait_until_index(1);
   intakeF.move(127);
-  chassis.pid_wait_until_index(3);
   intakeU.move(-127);
-  intakeF.move(-127);
+  chassis.pid_wait_until_index(2);
+  unloader.set(!(unloader.get()));
+  upper.set(true);
+  chassis.pid_wait_until_index(3);
+  pros::delay(50);
+  intakeU.move(127);
   chassis.pid_wait();
-  pros::delay(250);
+  pros::delay(750);
   chassis.pid_wait();
   chassis.pid_odom_set(
-    {{{-47.5_in, -3_in}, rev, DRIVE_SPEED}},
+    {{{45_in, -1_in}, rev, DRIVE_SPEED}},
   true);
-  chassis.pid_wait();
-  chassis.pid_odom_set(
-    {{{-50_in, -6_in}, fwd, DRIVE_SPEED}},
-  true);
+  chassis.pid_wait_until_index(0);
+  upper.set(false);
+  unloader.set(!(unloader.get()));
   chassis.pid_wait();
 }
 
 void blue_r() {
   chassis.pid_odom_set(
     {{{0_in, 2_in, 0_deg}, fwd, DRIVE_SPEED},
-      {{30.25_in, 10_in, 110_deg}, fwd, DRIVE_SPEED},
-      {{37.25_in, 8_in}, fwd, 50},
-      {{51_in, -7_in, 135_deg}, fwd, DRIVE_SPEED}},
-  true);
-  chassis.pid_wait_until_index(1);
-  intakeF.move(127);
-  chassis.pid_wait_until_index(3);
-  upper.set(true);
-  intakeU.move(127);
-  chassis.pid_wait();
-}
-
-void red_l() {
-  chassis.pid_odom_set(
-    {{{0_in, 2_in, 0_deg}, fwd, DRIVE_SPEED},
-      {{-30.25_in, 10_in, -110_deg}, fwd, DRIVE_SPEED},
+      {{-30.25_in, 10_in, -105_deg}, fwd, DRIVE_SPEED},
       {{-37.25_in, 8_in}, fwd, 50},
       {{-49.5_in, -5_in, -135_deg}, fwd, DRIVE_SPEED}},
   true);
   chassis.pid_wait_until_index(1);
   intakeF.move(127);
+  intakeU.move(-127);
   chassis.pid_wait_until_index(3);
   intakeU.move(-127);
   intakeF.move(-127);
@@ -466,23 +455,70 @@ void red_l() {
   true);
   chassis.pid_wait();
   chassis.pid_odom_set(
-    {{{-50_in, -6_in}, fwd, DRIVE_SPEED}},
+    {{{-52_in, -8_in}, fwd, DRIVE_SPEED}},
   true);
+  chassis.pid_wait();
+  chassis.pid_odom_set(
+    {{{-47.5_in, -3_in}, rev, DRIVE_SPEED}},
+  true);
+  chassis.pid_wait();
+}
+
+void red_l() {
+  chassis.pid_odom_set(
+    {{{0_in, 2_in, 0_deg}, fwd, DRIVE_SPEED},
+      {{28.25_in, 10_in, 105_deg}, fwd, 80},
+      {{35.25_in, 8_in}, fwd, 80},
+      {{50_in, -6_in, 135_deg}, fwd, DRIVE_SPEED}},
+  true);
+  chassis.pid_wait_until_index(1);
+  intakeF.move(127);
+  intakeU.move(-127);
+  chassis.pid_wait_until_index(2);
+  unloader.set(!(unloader.get()));
+  upper.set(true);
+  chassis.pid_wait_until_index(3);
+  pros::delay(50);
+  intakeU.move(127);
+  chassis.pid_wait();
+  pros::delay(750);
+  chassis.pid_wait();
+  chassis.pid_odom_set(
+    {{{45_in, -1_in}, rev, DRIVE_SPEED}},
+  true);
+  chassis.pid_wait_until_index(0);
+  upper.set(false);
+  unloader.set(!(unloader.get()));
   chassis.pid_wait();
 }
 
 void red_r() {
   chassis.pid_odom_set(
     {{{0_in, 2_in, 0_deg}, fwd, DRIVE_SPEED},
-      {{30.25_in, 10_in, 110_deg}, fwd, DRIVE_SPEED},
-      {{37.25_in, 8_in}, fwd, 50},
-      {{51_in, -7_in, 135_deg}, fwd, DRIVE_SPEED}},
+      {{-30.25_in, 10_in, -105_deg}, fwd, DRIVE_SPEED},
+      {{-37.25_in, 8_in}, fwd, 50},
+      {{-49.5_in, -5_in, -135_deg}, fwd, DRIVE_SPEED}},
   true);
   chassis.pid_wait_until_index(1);
   intakeF.move(127);
+  intakeU.move(-127);
   chassis.pid_wait_until_index(3);
-  upper.set(true);
-  intakeU.move(127);
+  intakeU.move(-127);
+  intakeF.move(-127);
+  chassis.pid_wait();
+  pros::delay(250);
+  chassis.pid_wait();
+  chassis.pid_odom_set(
+    {{{-47.5_in, -3_in}, rev, DRIVE_SPEED}},
+  true);
+  chassis.pid_wait();
+  chassis.pid_odom_set(
+    {{{-52_in, -8_in}, fwd, DRIVE_SPEED}},
+  true);
+  chassis.pid_wait();
+  chassis.pid_odom_set(
+    {{{-47.5_in, -3_in}, rev, DRIVE_SPEED}},
+  true);
   chassis.pid_wait();
 }
 

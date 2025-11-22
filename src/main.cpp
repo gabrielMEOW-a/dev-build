@@ -25,22 +25,22 @@ ez::tracking_wheel vert_tracker(14, 2.00, 0.35);   // This tracking wheel is par
 
 bool racism_override = false;
 bool team;
-bool be_racist;
+bool be_racist = true;
 void racism(void* paran) {
   while (true) {
     if (ColorSensor.get_proximity() > 240 && be_racist) {
-      if ((team && (ColorSensor.get_hue() > 340 || ColorSensor.get_hue() < 20) || (ColorSensor.get_hue() > 180 && ColorSensor.get_hue() < 220))) {
+      if ((team && (ColorSensor.get_hue() > 340 || ColorSensor.get_hue() < 20)) || (!team && ColorSensor.get_hue() > 180 && ColorSensor.get_hue() < 220)) {
         racism_override = true;
         int cur_pos = intake.get_position();
         intakeU.move(127);
-        while (intake.get_position() > cur_pos - 26000) {
+        while (intake.get_position() > cur_pos - 16000) {
           pros::delay(10);
         }
         intakeU.move(0);
         eject.set(true);
-        pros::delay(50);
+        pros::delay(100);
         eject.set(false);
-        intakeU.move(127);
+        intakeU.move(0);
         racism_override = false;
       }
     }
@@ -63,11 +63,6 @@ void initialize() {
 
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
 
-  if (ez::as::auton_selector.auton_page_current == 2 || ez::as::auton_selector.auton_page_current == 3) {
-    team = false;
-  } else {
-    team = true;
-  }
   pros::Task be_racist(racism, (void*)"parameter(s) here", "I hate...");
 
   // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
@@ -291,6 +286,12 @@ void opcontrol() {
 
   // chassis.opcontrol_joystick_practicemode_toggle(true);
 
+  if (ez::as::auton_selector.auton_page_current == 2 || ez::as::auton_selector.auton_page_current == 3) {
+    team = false;
+  } else {
+    team = true;
+  }
+
   while (true) {
     // Gives you some extras to make EZ-Template ezier
     // ez_template_extras();
@@ -315,6 +316,10 @@ void opcontrol() {
 
     if (master.get_digital_new_press(DIGITAL_DOWN)) {
       back.set(!back.get());
+    }
+
+    if (master.get_digital_new_press(DIGITAL_X)) {
+      be_racist = !be_racist;
     }
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
