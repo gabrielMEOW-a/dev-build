@@ -50,7 +50,10 @@
 
 
 /**
- * If you find doing pros::Motor() to be tedious and you'd prefer just to do
+ * Global variables accessible across files
+ */
+extern bool be_racist;
+/* If you find doing pros::Motor() to be tedious and you'd prefer just to do
  * Motor, you can use the namespace with the following commented out line.
  *
  * IMPORTANT: Only the okapi or pros namespace may be used, not both
