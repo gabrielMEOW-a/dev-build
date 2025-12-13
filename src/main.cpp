@@ -29,7 +29,7 @@ bool be_racist = true;
 void racism(void* paran) {
   while (true) {
     if (ColorSensor.get_proximity() > 240 && be_racist) {
-      if ((team && (ColorSensor.get_hue() > 340 || ColorSensor.get_hue() < 20)) || (!team && ColorSensor.get_hue() > 180 && ColorSensor.get_hue() < 220)) {
+      if ((team && (ColorSensor.get_hue() > 340 || ColorSensor.get_hue() < 20)) || (!team && ColorSensor.get_hue() > 180 && ColorSensor.get_hue() < 240)) {
         racism_override = true;
         int cur_pos = intake.get_position();
         intakeU.move(127);
@@ -65,6 +65,12 @@ void initialize() {
 
   pros::Task be_racist(racism, (void*)"parameter(s) here", "I hate...");
 
+  if (ez::as::auton_selector.auton_page_current == 2 || ez::as::auton_selector.auton_page_current == 3) {
+    team = false;
+  } else {
+    team = true;
+  }
+
   // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
   //  - change `back` to `front` if the tracking wheel is in front of the midline
   //  - ignore this if you aren't using a horizontal tracker
@@ -88,25 +94,26 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"Right Side Blue", blue_r},
-      {"Left Side Blue", blue_l},
-      {"Right Side Red", red_r},
-      {"Left Side Red", red_l},
-      {"Carry", carry},
-      {"Drive\n\nDrive forward and come back", drive_example},
-      {"Turn\n\nTurn 3 times.", turn_example},
-      {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
-      {"Drive and Turn\n\nSlow down during drive", wait_until_change_speed},
-      {"Swing Turn\n\nSwing in an 'S' curve", swing_example},
-      {"Motion Chaining\n\nDrive forward, turn, and come back, but blend everything together :D", motion_chaining},
-      {"Combine all 3 movements", combining_movements},
-      {"Interference\n\nAfter driving forward, robot performs differently if interfered or not", interfered_example},
-      {"Simple Odom\n\nThis is the same as the drive example, but it uses odom instead!", odom_drive_example},
-      {"Pure Pursuit\n\nGo to (0, 30) and pass through (6, 10) on the way.  Come back to (0, 0)", odom_pure_pursuit_example},
-      {"Pure Pursuit Wait Until\n\nGo to (24, 24) but start running an intake once the robot passes (12, 24)", odom_pure_pursuit_wait_until_example},
-      {"Boomerang\n\nGo to (0, 24, 45) then come back to (0, 0, 0)", odom_boomerang_example},
-      {"Boomerang Pure Pursuit\n\nGo to (0, 24, 45) on the way to (24, 24) then come back to (0, 0, 0)", odom_boomerang_injected_pure_pursuit_example},
-      {"Measure Offsets\n\nThis will turn the robot a bunch of times and calculate your offsets for your tracking wheels.", measure_offsets},
+    {"Prog Skills", proggyprogprog},
+    {"Left Side Blue", blue_l},
+    {"Right Side Blue", blue_r},
+    {"Left Side Red", red_l},
+    {"Right Side Red", red_r},
+    {"Carry", carry},
+    {"Drive\n\nDrive forward and come back", drive_example},
+    {"Turn\n\nTurn 3 times.", turn_example},
+    {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
+    {"Drive and Turn\n\nSlow down during drive", wait_until_change_speed},
+    {"Swing Turn\n\nSwing in an 'S' curve", swing_example},
+    {"Motion Chaining\n\nDrive forward, turn, and come back, but blend everything together :D", motion_chaining},
+    {"Combine all 3 movements", combining_movements},
+    {"Interference\n\nAfter driving forward, robot performs differently if interfered or not", interfered_example},
+    {"Simple Odom\n\nThis is the same as the drive example, but it uses odom instead!", odom_drive_example},
+    {"Pure Pursuit\n\nGo to (0, 30) and pass through (6, 10) on the way.  Come back to (0, 0)", odom_pure_pursuit_example},
+    {"Pure Pursuit Wait Until\n\nGo to (24, 24) but start running an intake once the robot passes (12, 24)", odom_pure_pursuit_wait_until_example},
+    {"Boomerang\n\nGo to (0, 24, 45) then come back to (0, 0, 0)", odom_boomerang_example},
+    {"Boomerang Pure Pursuit\n\nGo to (0, 24, 45) on the way to (24, 24) then come back to (0, 0, 0)", odom_boomerang_injected_pure_pursuit_example},
+    {"Measure Offsets\n\nThis will turn the robot a bunch of times and calculate your offsets for your tracking wheels.", measure_offsets},
   });
 
   // Initialize chassis and auton selector
@@ -114,7 +121,8 @@ void initialize() {
   ez::as::initialize();
   ColorSensor.set_led_pwm(100);
   intake.reset_position();
-  // unloader.set(true);
+  unloader.set(true);
+  back.set(true);
 
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
 }
@@ -286,17 +294,18 @@ void opcontrol() {
 
   // chassis.opcontrol_joystick_practicemode_toggle(true);
 
-  if (ez::as::auton_selector.auton_page_current == 2 || ez::as::auton_selector.auton_page_current == 3) {
-    team = false;
-  } else {
-    team = true;
-  }
+  back.set(true);
 
   while (true) {
     // Gives you some extras to make EZ-Template ezier
     // ez_template_extras();
 
 
+    if (ez::as::auton_selector.auton_page_current == 2 || ez::as::auton_selector.auton_page_current == 3) {
+      team = false;
+    } else {
+      team = true;
+    }
     // chassis.opcontrol_tank();
     chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
 
@@ -306,7 +315,7 @@ void opcontrol() {
     if (!racism_override) {
       intakeOpControl();
     }
-    if (master.get_digital_new_press(DIGITAL_RIGHT)) {
+    if (master.get_digital_new_press(DIGITAL_X)) {
       unloader.set(!unloader.get());
     }
 
@@ -318,7 +327,7 @@ void opcontrol() {
       back.set(!back.get());
     }
 
-    if (master.get_digital_new_press(DIGITAL_X)) {
+    if (master.get_digital_new_press(DIGITAL_Y)) {
       be_racist = !be_racist;
     }
 

@@ -12,10 +12,10 @@ void intakeOpControl() {
     if (master.get_digital(DIGITAL_L1)) {
         setIntakeF(127);
         setIntakeU(127);
-    } else if (master.get_digital(DIGITAL_L2)) {
+    } else if (master.get_digital(DIGITAL_R1)) {
         setIntakeF(-127);
         setIntakeU(-127);
-    } else if (master.get_digital(DIGITAL_R1)) {
+    } else if (master.get_digital(DIGITAL_L2)) {
         setIntakeF(127);
     } else if (master.get_digital(DIGITAL_R2)) {
         setIntakeF(127);
