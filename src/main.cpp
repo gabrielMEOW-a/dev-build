@@ -23,26 +23,47 @@ ez::Drive chassis(
 // ez::tracking_wheel horiz_tracker(8, 2.0671, -4.9);  // This tracking wheel is perpendicular to the drive wheels
 ez::tracking_wheel vert_tracker(14, 2.00, 0.35);   // This tracking wheel is parallel to the drive wheels || adjusted from moving robot 24-in
 
-bool racism_override = false;
-bool team;
-bool be_racist = true;
-void racism(void* paran) {
-  while (true) {
-    if (ColorSensor.get_proximity() > 240 && be_racist) {
-      if ((team && (ColorSensor.get_hue() > 340 || ColorSensor.get_hue() < 20)) || (!team && ColorSensor.get_hue() > 180 && ColorSensor.get_hue() < 240)) {
-        racism_override = true;
-        int cur_pos = intake.get_position();
-        intakeU.move(127);
-        while (intake.get_position() > cur_pos - 16000) {
-          pros::delay(10);
-        }
-        intakeU.move(0);
-        eject.set(true);
-        pros::delay(100);
-        eject.set(false);
-        intakeU.move(0);
-        racism_override = false;
+bool intake_override = false;
+// bool team;
+// bool be_racist = true;
+// void racism(void* paran) {
+//   while (true) {
+//     if (ColorSensor.get_proximity() > 240 && be_racist) {
+//       if ((team && (ColorSensor.get_hue() > 340 || ColorSensor.get_hue() < 20)) || (!team && ColorSensor.get_hue() > 180 && ColorSensor.get_hue() < 240)) {
+//         racism_override = true;
+//         int cur_pos = intake.get_position();
+//         intakeU.move(127);
+//         while (intake.get_position() > cur_pos - 16000) {
+//           pros::delay(10);
+//         }
+//         intakeU.move(0);
+//         eject.set(false);
+//         pros::delay(100);
+//         eject.set(true);
+//         intakeU.move(0);
+//         racism_override = false;
+//       }
+//     }
+//     pros::delay(10);
+//   }
+// }
+
+bool jamOn = true;
+void jamJam(void* param) {
+  int stuckTimer = 0;
+  while(true) {
+    if(intakeF.get_torque() > 0.3 && stuckTimer > 15) {
+        intake_override = true;
+        intakeF.move(-127);
+        pros::delay(2000);
+        // intakeF.move(127);
+        intake_override = false;
       }
+    else if(intakeF.get_torque() > 0.3) {
+      stuckTimer++;
+    }
+    else {
+      stuckTimer = 0;
     }
     pros::delay(10);
   }
@@ -63,13 +84,14 @@ void initialize() {
 
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
 
-  pros::Task be_racist(racism, (void*)"parameter(s) here", "I hate...");
+  // pros::Task racist_person(racism, (void*)"parameter(s) here", "I hate...");
+  // pros::Task jamJammer(jamJam, (void*)"parameter(s) here", "I hate getting stuck...");
 
-  if (ez::as::auton_selector.auton_page_current == 2 || ez::as::auton_selector.auton_page_current == 3) {
-    team = false;
-  } else {
-    team = true;
-  }
+  // if (ez::as::auton_selector.auton_page_current == 2 || ez::as::auton_selector.auton_page_current == 3) {
+  //   team = false;
+  // } else {
+  //   team = true;
+  // }
 
   // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
   //  - change `back` to `front` if the tracking wheel is in front of the midline
@@ -94,12 +116,12 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-    {"Prog Skills", proggyprogprog},
+    {"Carry", carry},
     {"Left Side Blue", blue_l},
     {"Right Side Blue", blue_r},
     {"Left Side Red", red_l},
     {"Right Side Red", red_r},
-    {"Carry", carry},
+    {"Prog Skills", proggyprogprog},
     {"Drive\n\nDrive forward and come back", drive_example},
     {"Turn\n\nTurn 3 times.", turn_example},
     {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
@@ -121,8 +143,11 @@ void initialize() {
   ez::as::initialize();
   ColorSensor.set_led_pwm(100);
   intake.reset_position();
-  unloader.set(true);
-  back.set(true);
+  // unloader.set(true);
+  // hood.set(true);
+  // upper.set(true);
+  // eject.set(true);
+  // be_racist = false;
 
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
 }
@@ -294,42 +319,49 @@ void opcontrol() {
 
   // chassis.opcontrol_joystick_practicemode_toggle(true);
 
-  back.set(true);
+  hood.set(true);
 
   while (true) {
     // Gives you some extras to make EZ-Template ezier
     // ez_template_extras();
 
 
-    if (ez::as::auton_selector.auton_page_current == 2 || ez::as::auton_selector.auton_page_current == 3) {
-      team = false;
-    } else {
-      team = true;
-    }
+    // if (ez::as::auton_selector.auton_page_current == 2 || ez::as::auton_selector.auton_page_current == 3) {
+    //   team = false;
+    // } else {
+    //   team = true;
+    // }
     // chassis.opcontrol_tank();
     chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
 
     // . . .
     // Put more user control code here!
     // . . .
-    if (!racism_override) {
+    if (!intake_override) {
       intakeOpControl();
     }
+    intakeOpControl();
     if (master.get_digital_new_press(DIGITAL_X)) {
       unloader.set(!unloader.get());
+    }
+    
+    if (master.get_digital_new_press(DIGITAL_Y)) {
+      wing.set(!wing.get());
     }
 
     if (master.get_digital_new_press(DIGITAL_UP)) {
       upper.set(!upper.get());
     }
 
-    if (master.get_digital_new_press(DIGITAL_DOWN)) {
-      back.set(!back.get());
+    if (master.get_digital(DIGITAL_RIGHT)) {
+      hood.set(true);
+    } else {
+      hood.set(false);
     }
 
-    if (master.get_digital_new_press(DIGITAL_Y)) {
-      be_racist = !be_racist;
-    }
+    // if (master.get_digital_new_press(DIGITAL_Y)) {
+    //   be_racist = !be_racist;
+    // }
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
     timer ++;

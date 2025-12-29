@@ -8,9 +8,10 @@ extern Drive chassis;
 // Your motors, sensors, etc. should go here.  Below are examples
 
 inline ez::Piston upper('A');
-inline ez::Piston unloader('B');
-inline ez::Piston back('C');
-inline ez::Piston eject('D');
+inline ez::Piston unloader('D');
+inline ez::Piston hood('E');
+inline ez::Piston eject('B');
+inline ez::Piston wing('C');
 
 inline pros::Rotation intake(10);
 
