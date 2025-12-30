@@ -8,8 +8,8 @@
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {-11, -12, -13},  // Left Chassis Ports (negative port will reverse it!)
-    {18, 19, 20},  // Right Chassis Ports (negative port will reverse it!)
+    {-12, -11, -13},  // Left Chassis Ports (negative port will reverse it!)
+    {19, 18, 20},  // Right Chassis Ports (negative port will reverse it!)
 
     1,      // IMU Port
     3.25,   // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!) || adjusted from moving robot 24-in
@@ -21,7 +21,7 @@ ez::Drive chassis(
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
 // ez::tracking_wheel horiz_tracker(8, 2.0671, -4.9);  // This tracking wheel is perpendicular to the drive wheels
-ez::tracking_wheel vert_tracker(14, 2.00, 0.35);   // This tracking wheel is parallel to the drive wheels || adjusted from moving robot 24-in
+ez::tracking_wheel vert_tracker(14, 2.00, 0.90);   // This tracking wheel is parallel to the drive wheels || adjusted from moving robot 24-in
 
 bool intake_override = false;
 // bool team;
@@ -116,12 +116,12 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
+    {"Prog Skills", proggyprogprog},
     {"Carry", carry},
     {"Left Side Blue", blue_l},
     {"Right Side Blue", blue_r},
     {"Left Side Red", red_l},
     {"Right Side Red", red_r},
-    {"Prog Skills", proggyprogprog},
     {"Drive\n\nDrive forward and come back", drive_example},
     {"Turn\n\nTurn 3 times.", turn_example},
     {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
@@ -319,7 +319,7 @@ void opcontrol() {
 
   // chassis.opcontrol_joystick_practicemode_toggle(true);
 
-  hood.set(true);
+  // hood.set(true);
 
   while (true) {
     // Gives you some extras to make EZ-Template ezier
@@ -337,9 +337,9 @@ void opcontrol() {
     // . . .
     // Put more user control code here!
     // . . .
-    if (!intake_override) {
-      intakeOpControl();
-    }
+    // if (!intake_override) {
+    //   intakeOpControl();
+    // }
     intakeOpControl();
     if (master.get_digital_new_press(DIGITAL_X)) {
       unloader.set(!unloader.get());
