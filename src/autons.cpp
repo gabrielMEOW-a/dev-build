@@ -574,7 +574,7 @@ void red_r() {
 }
 
 void proggyprogprog() {
-  chassis.pid_odom_set(29_in, 127, true);
+  chassis.pid_odom_set(29.5_in, 127, true);
   chassis.pid_wait();
   chassis.pid_turn_relative_set(85_deg, TURN_SPEED);
   chassis.pid_wait();
@@ -582,51 +582,65 @@ void proggyprogprog() {
   intakeU.move(127);
   unloader.set(true);
   pros::delay(100);
-  chassis.pid_odom_set(9_in, DRIVE_SPEED, true);
+  chassis.pid_odom_set(10_in, DRIVE_SPEED, true);
   chassis.pid_wait();
+  // chassis.drive_set(127,127);
+  // pros::delay(100);
+  // chassis.drive_set(0,0);
+  // pros::delay(100);
+  // chassis.drive_set(127,127);
+  // pros::delay(100);
+  // chassis.drive_set(0,0);
+  // pros::delay(500);
+  // chassis.drive_set(127,127);
+  // pros::delay(100);
+  // chassis.drive_set(0,0);
+  // pros::delay(100);
+  // chassis.drive_set(127,127);
+  // pros::delay(100);
+  // chassis.drive_set(0,0);
+  // pros::delay(100);
+  // chassis.drive_set(127,127);
+  // pros::delay(100);
+  // chassis.drive_set(0,0);
+  pros::delay(1500);
   chassis.drive_set(127,127);
   pros::delay(100);
   chassis.drive_set(0,0);
   pros::delay(100);
-  chassis.drive_set(127,127);
-  pros::delay(100);
-  chassis.drive_set(0,0);
-  pros::delay(100);
-  chassis.drive_set(127,127);
-  pros::delay(100);
-  chassis.drive_set(0,0);
-  pros::delay(500);
-  chassis.drive_set(127,127);
-  pros::delay(100);
-  chassis.drive_set(0,0);
-  pros::delay(100);
-  chassis.drive_set(127,127);
-  pros::delay(100);
-  chassis.drive_set(0,0);
-  pros::delay(100);
-  chassis.drive_set(127,127);
-  pros::delay(100);
-  chassis.drive_set(0,0);
-  pros::delay(750);
   intakeU.move(0);
-  chassis.pid_odom_set(-5_in, DRIVE_SPEED, true);
+  chassis.pid_odom_set(-6_in, DRIVE_SPEED, true);
   chassis.pid_wait();
   unloader.set(false);
-  chassis.pid_turn_relative_set(-180_deg, TURN_SPEED);
+  chassis.pid_turn_relative_set(180_deg, TURN_SPEED);
   chassis.pid_wait();
   chassis.pid_odom_set(
-    {{{-24_in, 19_in}, fwd, DRIVE_SPEED},
-    {{-75_in, 19_in}, fwd, DRIVE_SPEED},
+    {{{-24_in, 18_in}, fwd, DRIVE_SPEED},
+    {{-75_in, 18_in}, fwd, DRIVE_SPEED},
     {{-88_in, 33_in}, fwd, DRIVE_SPEED}},
   true);
   chassis.pid_wait();
   chassis.pid_turn_set(-90_deg, TURN_SPEED);
   chassis.pid_wait();
-  chassis.pid_odom_set({{-70_in, 33_in, -90_deg}, rev, DRIVE_SPEED}, true);
+  chassis.pid_odom_set({{-70_in, 32.75_in, -90_deg}, rev, DRIVE_SPEED}, true);
   chassis.pid_wait();
   hood.set(true);
   intakeU.move(127);
-  
+  pros::delay(2500);
+  hood.set(false);
+  unloader.set(true);
+  chassis.pid_odom_set(30.5_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+  pros::delay(1500);
+  chassis.drive_set(127,127);
+  pros::delay(100);
+  chassis.drive_set(0,0);
+  pros::delay(100);
+  intakeU.move(0);
+  chassis.pid_odom_set(-30.5_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+  hood.set(true);
+  intakeU.move(127);
 }
 
 void carry() {
