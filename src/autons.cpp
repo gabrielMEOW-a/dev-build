@@ -16,10 +16,10 @@ const int SWING_SPEED = 110;
 void default_constants() {
   // P, I, D, and Start I
   // done
-  chassis.pid_drive_constants_set(10.30, 0.041, 49.25, 2.0);         // Fwd/rev constants, used for odom and non odom motions
+  chassis.pid_drive_constants_set(9.20, 0.0, 14.50, 2.0);         // Fwd/rev constants, used for odom and non odom motions
   chassis.pid_heading_constants_set(11.0, 0.0, 20.0);        // Holds the robot straight while going forward without odom
   // not done yet
-  chassis.pid_turn_constants_set(5, 0.0, 37, 15.0);     // Turn in place constants
+  chassis.pid_turn_constants_set(5.5, 0.0, 39, 15.0);     // Turn in place constants
   chassis.pid_swing_constants_set(6.0, 0.0, 65.0);           // Swing constants
   chassis.pid_odom_angular_constants_set(2.6, 0.0, 58.75, 1.0);    // Angular control for odom motions
   chassis.pid_odom_boomerang_constants_set(5.1, 0.0, 40);  // Angular control for boomerang motions
@@ -59,41 +59,41 @@ void drive_example() {
   // The third parameter is a boolean (true or false) for enabling/disabling a slew at the start of drive motions
   // for slew, only enable it when the drive distance is greater than the slew distance + a few inches
 
-  chassis.pid_drive_set(48_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
+  // chassis.pid_drive_set(48_in, DRIVE_SPEED, true);
+  // chassis.pid_wait();
 
-  pros::delay(100);
-  chassis.pid_wait();
+  // pros::delay(100);
+  // chassis.pid_wait();
 
-  chassis.pid_drive_set(-24_in, DRIVE_SPEED);
-  chassis.pid_wait();
+  // chassis.pid_drive_set(-24_in, DRIVE_SPEED);
+  // chassis.pid_wait();
 
-  pros::delay(100);
+  // pros::delay(100);
+  // chassis.pid_wait();
+
+  // chassis.pid_drive_set(-12_in, DRIVE_SPEED);
+  // chassis.pid_wait();
+
+  // pros::delay(100);
+  // chassis.pid_wait();
+
+  // chassis.pid_drive_set(-6_in, DRIVE_SPEED);
+  // chassis.pid_wait();
+
+  // pros::delay(100);
+  // chassis.pid_wait();
+
+  // chassis.pid_drive_set(-6_in, DRIVE_SPEED);
+  // chassis.pid_wait();
+
+  chassis.pid_drive_set(24_in, DRIVE_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(-12_in, DRIVE_SPEED);
   chassis.pid_wait();
 
-  pros::delay(100);
+  chassis.pid_drive_set(-12_in, DRIVE_SPEED);
   chassis.pid_wait();
-
-  chassis.pid_drive_set(-6_in, DRIVE_SPEED);
-  chassis.pid_wait();
-
-  pros::delay(100);
-  chassis.pid_wait();
-
-  chassis.pid_drive_set(-6_in, DRIVE_SPEED);
-  chassis.pid_wait();
-
-  // chassis.pid_drive_set(24_in, DRIVE_SPEED);
-  // chassis.pid_wait();
-
-  // chassis.pid_drive_set(-12_in, DRIVE_SPEED);
-  // chassis.pid_wait();
-
-  // chassis.pid_drive_set(-12_in, DRIVE_SPEED);
-  // chassis.pid_wait();
 }
 
 ///
@@ -576,13 +576,13 @@ void red_r() {
 void proggyprogprog() {
   chassis.pid_odom_set(29.5_in, 127, true);
   chassis.pid_wait();
-  chassis.pid_turn_relative_set(85_deg, TURN_SPEED);
+  chassis.pid_turn_relative_set(90_deg, TURN_SPEED);
   chassis.pid_wait();
   intakeF.move(127);
   intakeU.move(127);
   unloader.set(true);
   pros::delay(100);
-  chassis.pid_odom_set(10_in, DRIVE_SPEED, true);
+  chassis.pid_odom_set(10.5_in, DRIVE_SPEED, true);
   chassis.pid_wait();
   // chassis.drive_set(127,127);
   // pros::delay(100);
@@ -603,13 +603,13 @@ void proggyprogprog() {
   // chassis.drive_set(127,127);
   // pros::delay(100);
   // chassis.drive_set(0,0);
-  pros::delay(1500);
+  pros::delay(1000);
   chassis.drive_set(127,127);
-  pros::delay(100);
+  pros::delay(500);
   chassis.drive_set(0,0);
   pros::delay(100);
   intakeU.move(0);
-  chassis.pid_odom_set(-6_in, DRIVE_SPEED, true);
+  chassis.pid_odom_set(-6.5_in, 127, true);
   chassis.pid_wait();
   unloader.set(false);
   chassis.pid_turn_relative_set(180_deg, TURN_SPEED);
@@ -622,14 +622,18 @@ void proggyprogprog() {
   chassis.pid_wait();
   chassis.pid_turn_set(-90_deg, TURN_SPEED);
   chassis.pid_wait();
-  chassis.pid_odom_set({{-70_in, 32.75_in, -90_deg}, rev, DRIVE_SPEED}, true);
+  chassis.pid_odom_set({{-70_in, 33.75_in, -90_deg}, rev, DRIVE_SPEED}, true);
   chassis.pid_wait();
+  hood.set(true);
+  pros::delay(50);
+  hood.set(false);
+  pros::delay(50);
   hood.set(true);
   intakeU.move(127);
   pros::delay(2500);
   hood.set(false);
   unloader.set(true);
-  chassis.pid_odom_set(30.5_in, DRIVE_SPEED, true);
+  chassis.pid_odom_set(32_in, DRIVE_SPEED, true);
   chassis.pid_wait();
   pros::delay(1500);
   chassis.drive_set(127,127);
@@ -637,7 +641,7 @@ void proggyprogprog() {
   chassis.drive_set(0,0);
   pros::delay(100);
   intakeU.move(0);
-  chassis.pid_odom_set(-30.5_in, DRIVE_SPEED, true);
+  chassis.pid_odom_set({{-70_in, 33.75_in, -90_deg}, rev, DRIVE_SPEED}, true);
   chassis.pid_wait();
   hood.set(true);
   intakeU.move(127);
