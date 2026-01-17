@@ -116,14 +116,10 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-    
-    {"Prog Skills", proggyprogprog},
-    {"Right Side Blue", blue_r},
-    {"Carry", carry},
     {"Left Side Blue", blue_l},
-    
-    {"Left Side Red", red_l},
-    {"Right Side Red", red_r},
+    {"Right Side Blue", blue_r},
+    {"Prog Skills", proggyprogprog},
+    {"Carry", carry},
     {"Drive\n\nDrive forward and come back", drive_example},
     {"Turn\n\nTurn 3 times.", turn_example},
     {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
@@ -325,7 +321,7 @@ void opcontrol() {
 
   while (true) {
     // Gives you some extras to make EZ-Template ezier
-    ez_template_extras();
+    // ez_template_extras();
 
 
     // if (ez::as::auton_selector.auton_page_current == 2 || ez::as::auton_selector.auton_page_current == 3) {
@@ -342,24 +338,24 @@ void opcontrol() {
     // if (!intake_override) {
     //   intakeOpControl();
     // }
-    // intakeOpControl();
-    // if (master.get_digital_new_press(DIGITAL_X)) {
-    //   unloader.set(!unloader.get());
-    // }
+    intakeOpControl();
+    if (master.get_digital_new_press(DIGITAL_X)) {
+      unloader.set(!unloader.get());
+    }
     
-    // if (master.get_digital_new_press(DIGITAL_Y)) {
-    //   wing.set(!wing.get());
-    // }
+    if (master.get_digital_new_press(DIGITAL_B)) {
+      wing.set(!wing.get());
+    }
 
-    // if (master.get_digital_new_press(DIGITAL_UP)) {
-    //   upper.set(!upper.get());
-    // }
+    if (master.get_digital_new_press(DIGITAL_UP)) {
+      upper.set(!upper.get());
+    }
 
-    // if (master.get_digital(DIGITAL_DOWN)) {
-    //   hood.set(true);
-    // } else {
-    //   hood.set(false);
-    // }
+    if (master.get_digital(DIGITAL_DOWN)) {
+      hood.set(true);
+    } else {
+      hood.set(false);
+    }
 
     // if (master.get_digital_new_press(DIGITAL_Y)) {
     //   be_racist = !be_racist;

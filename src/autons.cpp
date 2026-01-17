@@ -407,89 +407,100 @@ void measure_offsets() {
 // . . .
 
 void blue_l() {
-  chassis.pid_odom_set(
-    {{{0_in, 2_in, 0_deg}, fwd, DRIVE_SPEED},
-      {{28.25_in, 10_in, 105_deg}, fwd, 80},
-      {{35.25_in, 8_in}, fwd, DRIVE_SPEED},
-      {{49_in, -5_in, 135_deg}, fwd, DRIVE_SPEED}},
-  true);
-  chassis.pid_wait_until_index(1);
   intakeF.move(127);
-  intakeU.move(-127);
-  chassis.pid_wait_until_index(2);
-  // unloader.set(!(unloader.get()));
-  upper.set(true);
-  chassis.pid_wait_until_index(3);
-  pros::delay(50);
-  intakeF.move(80);
-  intakeU.move(80);
+  intakeU.move(127);
+  chassis.pid_odom_set(10_in, DRIVE_SPEED, true);
   chassis.pid_wait();
-  pros::delay(1000);
-  intakeU.move(0);
+  chassis.pid_turn_relative_set(-35_deg, TURN_SPEED);
   chassis.pid_wait();
-  chassis.pid_odom_set(
-    {{{45_in, -1_in}, rev, DRIVE_SPEED},
-    {{18_in, 29_in},rev, DRIVE_SPEED}},
-  true);
-  chassis.pid_wait_until_index(0);
-  upper.set(false);
-  // unloader.set(!(unloader.get()));
+  chassis.pid_odom_set(15_in, 50, true);
   chassis.pid_wait();
-  chassis.pid_turn_set(-90_deg, TURN_SPEED);
-  unloader.set(!(unloader.get()));
-  intakeF.move(127);
-  intakeU.move(25);
+  chassis.pid_turn_set(-135_deg, TURN_SPEED);
   chassis.pid_wait();
-  chassis.pid_odom_set(
-    {{-2_in, 28.5_in}, fwd, DRIVE_SPEED},
-  true);
+  chassis.pid_odom_set(34_in, DRIVE_SPEED, true);
   chassis.pid_wait();
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
+  chassis.pid_wait();
+  unloader.set(true);
+  pros::delay(100);
+  chassis.pid_wait();
+  chassis.pid_odom_set(10_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+  pros::delay(200);
   chassis.drive_set(127,127);
-  pros::delay(400);
+  pros::delay(50);
   chassis.drive_set(0,0);
-  // chassis.drive_set(-110,-110);
-  // pros::delay(100);
-  // chassis.drive_set(110,110);
-  // pros::delay(100);
-  // chassis.drive_set(0,0);
-  // pros::delay(500);
-  chassis.pid_odom_set(
-    {{29_in, 30_in}, rev, DRIVE_SPEED},
-  true);
+  pros::delay(200);
+  chassis.pid_wait();
+  chassis.pid_odom_set({{-35_in, 16.5_in}, rev, DRIVE_SPEED}, true);
   chassis.pid_wait();
   hood.set(true);
+  unloader.set(false);
+  chassis.pid_wait();
+  pros::delay(100);
+  intakeF.move(-127);
+  intakeU.move(-127);
+  pros::delay(150);
+  intakeF.move(127);
   intakeU.move(127);
+  pros::delay(1750);
+  chassis.pid_odom_set(15_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+  chassis.pid_turn_set(0_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_odom_set(
+    {{{-25_in, 14_in}, fwd, DRIVE_SPEED},
+    {{-25_in, 32_in}, fwd, DRIVE_SPEED}},
+  true);
   chassis.pid_wait();
 }
 
 void blue_r() {
-  chassis.pid_odom_set(
-    {{{0_in, 2_in, 0_deg}, fwd, DRIVE_SPEED},
-      {{-30.25_in, 10_in, -105_deg}, fwd, DRIVE_SPEED},
-      {{-37.25_in, 8_in}, fwd, 50},
-      {{-49.5_in, -5_in, -135_deg}, fwd, DRIVE_SPEED}},
-  true);
-  chassis.pid_wait_until_index(1);
-  intakeF.move(80);
-  intakeU.move(-80);
-  chassis.pid_wait_until_index(3);
-  intakeU.move(-80);
-  intakeF.move(-80);
+  intakeF.move(127);
+  // intakeU.move(127);
+  chassis.pid_odom_set(10_in, DRIVE_SPEED, true);
   chassis.pid_wait();
+  chassis.pid_turn_relative_set(35_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_odom_set(15_in, 30, true);
+  chassis.pid_wait();
+  chassis.pid_turn_relative_set(-80_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_odom_set(13_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+  intakeF.move(-80);
+  // intakeU.move(-127);
+  pros::delay(950);
+  intakeF.move(75);
+  intakeU.move(0);
+  chassis.pid_wait();
+  chassis.pid_odom_set(-48_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+  chassis.pid_turn_set(-180_deg, TURN_SPEED);
+  chassis.pid_wait();
+  unloader.set(true);
+  intakeF.move(127);
+  intakeU.move(127);
+  chassis.pid_wait();
+  chassis.pid_odom_set(10_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+  pros::delay(200);
+  chassis.drive_set(127,127);
+  pros::delay(100);
+  chassis.drive_set(0,0);
   pros::delay(250);
   chassis.pid_wait();
-  chassis.pid_odom_set(
-    {{{-47.5_in, -3_in}, rev, DRIVE_SPEED}},
-  true);
+  chassis.pid_odom_set({{32_in, 14.5_in}, rev, DRIVE_SPEED}, true);
   chassis.pid_wait();
-  chassis.pid_odom_set(
-    {{{-52_in, -8_in}, fwd, DRIVE_SPEED}},
-  true);
+  hood.set(true);
+  unloader.set(false);
   chassis.pid_wait();
-  chassis.pid_odom_set(
-    {{{-47.5_in, -3_in}, rev, DRIVE_SPEED}},
-  true);
-  chassis.pid_wait();
+  pros::delay(100);
+  intakeF.move(-127);
+  intakeU.move(-127);
+  pros::delay(250);
+  intakeF.move(127);
+  intakeU.move(127);
 }
 
 void red_l() {
