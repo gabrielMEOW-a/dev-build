@@ -116,8 +116,9 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-    {"Left Side Blue", blue_l},
+    
     {"Right Side Blue", blue_r},
+    {"Left Side Blue", blue_l},
     {"Prog Skills", proggyprogprog},
     {"Carry", carry},
     {"Drive\n\nDrive forward and come back", drive_example},

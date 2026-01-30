@@ -413,7 +413,7 @@ void blue_l() {
   chassis.pid_wait();
   chassis.pid_turn_relative_set(-35_deg, TURN_SPEED);
   chassis.pid_wait();
-  chassis.pid_odom_set(15_in, 50, true);
+  chassis.pid_odom_set(15_in, 40, true);
   chassis.pid_wait();
   chassis.pid_turn_set(-135_deg, TURN_SPEED);
   chassis.pid_wait();
@@ -432,7 +432,7 @@ void blue_l() {
   chassis.drive_set(0,0);
   pros::delay(200);
   chassis.pid_wait();
-  chassis.pid_odom_set({{-35_in, 16.5_in}, rev, DRIVE_SPEED}, true);
+  chassis.pid_odom_set({{-33_in, 16.5_in}, rev, DRIVE_SPEED}, true);
   chassis.pid_wait();
   hood.set(true);
   unloader.set(false);
@@ -449,8 +449,8 @@ void blue_l() {
   chassis.pid_turn_set(0_deg, TURN_SPEED);
   chassis.pid_wait();
   chassis.pid_odom_set(
-    {{{-25_in, 14_in}, fwd, DRIVE_SPEED},
-    {{-25_in, 32_in}, fwd, DRIVE_SPEED}},
+    {{{-23_in, 14_in}, fwd, DRIVE_SPEED},
+    {{-23_in, 32_in}, fwd, DRIVE_SPEED}},
   true);
   chassis.pid_wait();
 }
@@ -462,19 +462,19 @@ void blue_r() {
   chassis.pid_wait();
   chassis.pid_turn_relative_set(35_deg, TURN_SPEED);
   chassis.pid_wait();
-  chassis.pid_odom_set(15_in, 30, true);
+  chassis.pid_odom_set(15_in, 40, true);
   chassis.pid_wait();
   chassis.pid_turn_relative_set(-80_deg, TURN_SPEED);
   chassis.pid_wait();
-  chassis.pid_odom_set(13_in, DRIVE_SPEED, true);
+  chassis.pid_odom_set(10_in, DRIVE_SPEED, true);
   chassis.pid_wait();
   intakeF.move(-80);
   // intakeU.move(-127);
-  pros::delay(950);
+  pros::delay(800);
   intakeF.move(75);
-  intakeU.move(0);
+  intakeU.move(127);
   chassis.pid_wait();
-  chassis.pid_odom_set(-48_in, DRIVE_SPEED, true);
+  chassis.pid_odom_set(-45_in, DRIVE_SPEED, true);
   chassis.pid_wait();
   chassis.pid_turn_set(-180_deg, TURN_SPEED);
   chassis.pid_wait();
@@ -484,13 +484,13 @@ void blue_r() {
   chassis.pid_wait();
   chassis.pid_odom_set(10_in, DRIVE_SPEED, true);
   chassis.pid_wait();
-  pros::delay(200);
+  pros::delay(50);
   chassis.drive_set(127,127);
   pros::delay(100);
   chassis.drive_set(0,0);
-  pros::delay(250);
+  pros::delay(200);
   chassis.pid_wait();
-  chassis.pid_odom_set({{32_in, 14.5_in}, rev, DRIVE_SPEED}, true);
+  chassis.pid_odom_set({{33_in, 15.5_in}, rev, DRIVE_SPEED}, true);
   chassis.pid_wait();
   hood.set(true);
   unloader.set(false);
