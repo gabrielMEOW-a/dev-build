@@ -601,3 +601,9 @@ void carry() {
   chassis.pid_odom_set({{0_in, 5_in}, fwd, DRIVE_SPEED}, true);
   chassis.pid_wait();
 }
+
+void test() {
+  chassis.pid_odom_set({{24_in, 24_in}, fwd, DRIVE_SPEED}, true);
+  chassis.pid_wait();
+  pros::delay(5000);
+}

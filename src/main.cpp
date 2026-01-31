@@ -20,7 +20,7 @@ ez::Drive chassis(
 //  - you should get positive values on the encoders going FORWARD and RIGHT
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
-ez::tracking_wheel horiz_tracker(14, 2.75, -6.83);  // This tracking wheel is perpendicular to the drive wheels
+ez::tracking_wheel horiz_tracker(-14, 2.75, -6.83);  // This tracking wheel is perpendicular to the drive wheels
 ez::tracking_wheel vert_tracker(15, 2.00, 0.52);   // This tracking wheel is parallel to the drive wheels || adjusted from moving robot 24-in
 
 bool intake_override = false;
@@ -116,6 +116,7 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
+    {"Test", test},
     {"Prog Skills", proggyprogprog},
     {"Right Side Blue", blue_r},
     {"Left Side Blue", blue_l},
@@ -322,7 +323,7 @@ void opcontrol() {
 
   while (true) {
     // Gives you some extras to make EZ-Template ezier
-    // ez_template_extras();
+    ez_template_extras();
 
 
     // if (ez::as::auton_selector.auton_page_current == 2 || ez::as::auton_selector.auton_page_current == 3) {
@@ -339,24 +340,24 @@ void opcontrol() {
     // if (!intake_override) {
     //   intakeOpControl();
     // }
-    intakeOpControl();
-    if (master.get_digital_new_press(DIGITAL_X)) {
-      unloader.set(!unloader.get());
-    }
+    // intakeOpControl();
+    // if (master.get_digital_new_press(DIGITAL_X)) {
+    //   unloader.set(!unloader.get());
+    // }
     
-    if (master.get_digital_new_press(DIGITAL_B)) {
-      wing.set(!wing.get());
-    }
+    // if (master.get_digital_new_press(DIGITAL_B)) {
+    //   wing.set(!wing.get());
+    // }
 
-    if (master.get_digital_new_press(DIGITAL_UP)) {
-      upper.set(!upper.get());
-    }
+    // if (master.get_digital_new_press(DIGITAL_UP)) {
+    //   upper.set(!upper.get());
+    // }
 
-    if (master.get_digital(DIGITAL_DOWN)) {
-      hood.set(true);
-    } else {
-      hood.set(false);
-    }
+    // if (master.get_digital(DIGITAL_DOWN)) {
+    //   hood.set(true);
+    // } else {
+    //   hood.set(false);
+    // }
 
     // if (master.get_digital_new_press(DIGITAL_Y)) {
     //   be_racist = !be_racist;
