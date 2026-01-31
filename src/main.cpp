@@ -8,8 +8,8 @@
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {-12, -11, -13},  // Left Chassis Ports (negative port will reverse it!)
-    {19, 18, 20},  // Right Chassis Ports (negative port will reverse it!)
+    {-11, -12, -13},  // Left Chassis Ports (negative port will reverse it!)
+    {20, 18, 19},  // Right Chassis Ports (negative port will reverse it!)
 
     1,      // IMU Port
     3.25,   // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!) || adjusted from moving robot 24-in
@@ -20,8 +20,8 @@ ez::Drive chassis(
 //  - you should get positive values on the encoders going FORWARD and RIGHT
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
-// ez::tracking_wheel horiz_tracker(8, 2.0671, -4.9);  // This tracking wheel is perpendicular to the drive wheels
-ez::tracking_wheel vert_tracker(14, 2.00, 0.90);   // This tracking wheel is parallel to the drive wheels || adjusted from moving robot 24-in
+ez::tracking_wheel horiz_tracker(14, 2.75, -6.83);  // This tracking wheel is perpendicular to the drive wheels
+ez::tracking_wheel vert_tracker(15, 2.00, 0.52);   // This tracking wheel is parallel to the drive wheels || adjusted from moving robot 24-in
 
 bool intake_override = false;
 // bool team;
@@ -96,7 +96,7 @@ void initialize() {
   // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
   //  - change `back` to `front` if the tracking wheel is in front of the midline
   //  - ignore this if you aren't using a horizontal tracker
-  // chassis.odom_tracker_back_set(&horiz_tracker);
+  chassis.odom_tracker_back_set(&horiz_tracker);
   // Look at your vertical tracking wheel and decide if it's to the left or right of the center of the robot
   //  - change `left` to `right` if the tracking wheel is to the right of the centerline
   //  - ignore this if you aren't using a vertical tracker
@@ -116,10 +116,10 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-    
+    {"Prog Skills", proggyprogprog},
     {"Right Side Blue", blue_r},
     {"Left Side Blue", blue_l},
-    {"Prog Skills", proggyprogprog},
+    
     {"Carry", carry},
     {"Drive\n\nDrive forward and come back", drive_example},
     {"Turn\n\nTurn 3 times.", turn_example},
