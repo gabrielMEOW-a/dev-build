@@ -20,8 +20,8 @@ ez::Drive chassis(
 //  - you should get positive values on the encoders going FORWARD and RIGHT
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
-ez::tracking_wheel horiz_tracker(-14, 2.75, -6.83);  // This tracking wheel is perpendicular to the drive wheels
-ez::tracking_wheel vert_tracker(15, 2.00, 0.52);   // This tracking wheel is parallel to the drive wheels || adjusted from moving robot 24-in
+ez::tracking_wheel horiz_tracker(-14, 2.75, -7.01);  // This tracking wheel is perpendicular to the drive wheels
+// ez::tracking_wheel vert_tracker(15, 2.00, 0.52);   // This tracking wheel is parallel to the drive wheels || adjusted from moving robot 24-in
 
 bool intake_override = false;
 // bool team;
@@ -48,21 +48,22 @@ bool intake_override = false;
 //   }
 // }
 
-bool jamOn = true;
+bool jamOn = false;
 void jamJam(void* param) {
   int stuckTimer = 0;
   while(true) {
-    if(intakeF.get_torque() > 0.3 && stuckTimer > 15) {
-        intake_override = true;
-        intakeF.move(-127);
-        pros::delay(2000);
-        // intakeF.move(127);
-        intake_override = false;
-      }
-    else if(intakeF.get_torque() > 0.3) {
+    if(stuckTimer > 15 && jamOn) {
+      intake_override = true;
+      intakeF.move(-127);
+      intakeU.move(-127);
+      pros::delay(100);
+      intakeF.move(127);
+      intakeU.move(127);
+      stuckTimer = 0;
+      intake_override = false;
+    } else if((intakeF.get_torque() > 0.3 && intakeF.get_actual_velocity() < 10) || (intakeU.get_torque() > 0.3 && intakeU.get_actual_velocity() < 10)) {
       stuckTimer++;
-    }
-    else {
+    } else {
       stuckTimer = 0;
     }
     pros::delay(10);
@@ -85,7 +86,7 @@ void initialize() {
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
 
   // pros::Task racist_person(racism, (void*)"parameter(s) here", "I hate...");
-  // pros::Task jamJammer(jamJam, (void*)"parameter(s) here", "I hate getting stuck...");
+  pros::Task jamJammer(jamJam, (void*)"parameter(s) here", "I hate getting stuck...");
 
   // if (ez::as::auton_selector.auton_page_current == 2 || ez::as::auton_selector.auton_page_current == 3) {
   //   team = false;
@@ -100,7 +101,7 @@ void initialize() {
   // Look at your vertical tracking wheel and decide if it's to the left or right of the center of the robot
   //  - change `left` to `right` if the tracking wheel is to the right of the centerline
   //  - ignore this if you aren't using a vertical tracker
-  chassis.odom_tracker_right_set(&vert_tracker);
+  // chassis.odom_tracker_right_set(&vert_tracker);
 
   // Configure your chassis controls
   chassis.opcontrol_curve_buttons_toggle(false);   // Enables modifying the controller curve with buttons on the joysticks
@@ -116,7 +117,6 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-    {"Test", test},
     {"Prog Skills", proggyprogprog},
     {"Right Side Blue", blue_r},
     {"Left Side Blue", blue_l},
@@ -136,6 +136,7 @@ void initialize() {
     {"Boomerang\n\nGo to (0, 24, 45) then come back to (0, 0, 0)", odom_boomerang_example},
     {"Boomerang Pure Pursuit\n\nGo to (0, 24, 45) on the way to (24, 24) then come back to (0, 0, 0)", odom_boomerang_injected_pure_pursuit_example},
     {"Measure Offsets\n\nThis will turn the robot a bunch of times and calculate your offsets for your tracking wheels.", measure_offsets},
+    {"Test", test},
   });
 
   // Initialize chassis and auton selector
@@ -323,7 +324,7 @@ void opcontrol() {
 
   while (true) {
     // Gives you some extras to make EZ-Template ezier
-    ez_template_extras();
+    // ez_template_extras();
 
 
     // if (ez::as::auton_selector.auton_page_current == 2 || ez::as::auton_selector.auton_page_current == 3) {
@@ -337,27 +338,27 @@ void opcontrol() {
     // . . .
     // Put more user control code here!
     // . . .
-    // if (!intake_override) {
-    //   intakeOpControl();
-    // }
+    if (!intake_override) {
+      intakeOpControl();
+    }
     // intakeOpControl();
-    // if (master.get_digital_new_press(DIGITAL_X)) {
-    //   unloader.set(!unloader.get());
-    // }
+    if (master.get_digital_new_press(DIGITAL_X)) {
+      unloader.set(!unloader.get());
+    }
     
-    // if (master.get_digital_new_press(DIGITAL_B)) {
-    //   wing.set(!wing.get());
-    // }
+    if (master.get_digital_new_press(DIGITAL_B)) {
+      wing.set(!wing.get());
+    }
 
-    // if (master.get_digital_new_press(DIGITAL_UP)) {
-    //   upper.set(!upper.get());
-    // }
+    if (master.get_digital_new_press(DIGITAL_UP)) {
+      upper.set(!upper.get());
+    }
 
-    // if (master.get_digital(DIGITAL_DOWN)) {
-    //   hood.set(true);
-    // } else {
-    //   hood.set(false);
-    // }
+    if (master.get_digital(DIGITAL_DOWN)) {
+      hood.set(true);
+    } else {
+      hood.set(false);
+    }
 
     // if (master.get_digital_new_press(DIGITAL_Y)) {
     //   be_racist = !be_racist;
